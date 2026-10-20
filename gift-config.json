@@ -1,0 +1,39 @@
+{
+  "recipient": "Mr. Wayne",
+  "nickname": "Batboy",
+  "sender": "Your Catwoman",
+  "title": "MY BATMAN, MY FAVOURITE PERSON. 🦇❤️",
+  "introMessage": "I made you a secret little corner of Gotham. No villains to chase tonight—just a few things I wanted you to keep.",
+  "introNote": "You can be the hero for everyone else tomorrow. Tonight, come sit beside me. I saved the softest page, the good spot on the rooftop, and at least one very dramatic kiss.",
+  "letter": "Hey, my Batboy,\n\nI wanted to make you a little place that feels like ours—a hideout from the noise, with a few things I never want to forget and a letter you can open whenever you need me close.\n\nWhat I love most is the way an ordinary day gets softer when you're in it: the little jokes, the quiet comfort, and that feeling of being on the same side. I hope this tiny scrapbook feels a bit like a hug from me.\n\nSo when Gotham gets loud, come find me. I'll be the girl in black on the rooftop, saving you a seat and pretending I don't already know you're my favourite.\n\nAll my love, and one kiss I am absolutely not taking back,\nYour Catwoman",
+  "password": "0406",
+  "ownerPin": "1212",
+  "dialogue": ["Gotham needs me tonight.", "And who needs me, then? Hm? 💋", "Your favourite idiot. Always. 🖤"],
+  "reasons": [
+    {"front": "The easy quiet", "back": "I like that we don't have to fill every second."},
+    {"front": "Our odd little humor", "back": "Half the fun is knowing exactly why we're laughing."},
+    {"front": "The way it feels", "back": "Being on your side feels like the easiest choice."},
+    {"front": "Small everyday things", "back": "A normal day gets a little golden when it's ours."},
+    {"front": "My favourite place", "back": "It keeps turning out to be right beside you."},
+    {"front": "The next page", "back": "I still get a tiny thrill thinking about more us."}
+  ],
+  "gallery": [
+    {"id": "art-moon", "art": "moon", "caption": "The city can wait. I like it up here with you.", "date": "a keeper, always", "rotation": -3, "scale": 100},
+    {"id": "art-rose", "art": "rose", "caption": "Proof that soft things can be a little bit fearless.", "date": "pressed between the good pages", "rotation": 2, "scale": 100},
+    {"id": "art-rooftop", "art": "rooftop", "caption": "A whole city below. My favourite person beside me.", "date": "somewhere above the noise", "rotation": -1, "scale": 100}
+  ],
+  "scrapSecret": "Official Gotham notice: your heart is under new management. Mine. ♡",
+  "batSecret": "If you ever need me, no signal needed. One message and I'm already on my way.",
+  "catSecret": "Purr-sonal note: I stole your heart. I'm keeping it. You can have mine. 💋",
+  "finalMessage": "If you made it all the way here: I still have a crush on you. That's the whole secret. See you on the next page, my love.",
+  "openButton": "Open your surprise, baby 💌",
+  "templateButtonLabel": "Customize this gift for your person ↗",
+  "kissButton": "send a little kiss to the moon 💋",
+  "finalLinkLabel": "Open the next little surprise ↗",
+  "finalLinkUrl": "",
+  "coupleArt": "",
+  "accent": "#c38b9b", "paper": "#f3ebdc", "font": "classic", "preset": "moonlit",
+  "songTitle": "Moonlight in Gotham", "songUrl": "", "musicEmbed": "", "cover": "",
+  "playerDesign": "card", "playerShape": "rounded", "playerPosition": "bottom-right", "playerWidth": 340,
+  "playerBg": "#f3ebdc", "playerAccent": "#c38b9b", "playerAnimation": "spin"
+}
