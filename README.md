@@ -14,12 +14,12 @@ The customer can later return to the editor in the same browser to update or rev
 
 ## One-time Lovbyte hosting setup
 
-The share-link API requires **Cloudflare Pages**, Cloudflare Pages Functions, one private R2 bucket, and one KV namespace. GitHub Pages serves only the static site and cannot run the share-link functions. The current GitHub Pages link will not create customer-specific links until the project is deployed to Cloudflare Pages and the bindings below are added.
+The share-link API requires **Cloudflare Pages**, Cloudflare Pages Functions, and two Cloudflare KV namespaces. GitHub Pages serves only the static site and cannot run the share-link functions. The current GitHub Pages link will not create customer-specific links; give customers the Cloudflare Pages link after setup.
 
 1. Put `index.html`, `gift-config.json`, `_routes.json`, and the `functions/` folder together at the root of the GitHub repository.
 2. In Cloudflare, create a Pages project connected to that GitHub repository. Choose no build command and `.` as the build output directory.
-3. Create a private R2 bucket for gifts (for example, `lovbyte-gifts`) and a KV namespace for rate limits (for example, `lovbyte-gift-limits`).
-4. Open the Pages project **Settings → Bindings**. Add an R2 bucket binding named `GIFTS` and select the bucket. Add a KV namespace binding named `LIMITS` and select the namespace.
+3. Create two KV namespaces: `lovbyte-gifts` and `lovbyte-gift-limits`.
+4. Open the Pages project **Settings → Bindings**. Add a KV namespace binding named `GIFTS` and select `lovbyte-gifts`. Add a second KV namespace binding named `LIMITS` and select `lovbyte-gift-limits`.
 5. Redeploy the Pages project so both bindings are active. Open the new Cloudflare Pages URL and test the editor's **Create my gift link** button.
 6. Give customers the Cloudflare Pages template URL. They do not need a GitHub or Cloudflare account to customize and make a gift link.
 
@@ -27,14 +27,14 @@ Cloudflare's [Pages Functions bindings guide](https://developers.cloudflare.com/
 
 ## Storage, privacy, and limits
 
-- Each published gift is stored in a private R2 bucket under a random ID. The API returns only the recipient name, nickname, opening message, and button text before the passcode.
+- Each published gift is stored in the private `GIFTS` KV namespace under a random ID. The API returns only the recipient name, nickname, opening message, and button text before the passcode.
 - The recipient passcode is SHA-256 hashed with the gift ID and checked by the server. The complete gift data is returned only after the passcode is correct. Eight attempts per gift and IP per hour are allowed.
 - The owner desk PIN and recipient passcode are not sent in the public preview. Gift data is not end-to-end encrypted; the Lovbyte Cloudflare account controls the storage. After unlocking, the recipient can view the content and browser-delivered media.
 - The share URL is unlisted, not a public directory listing. Anyone who gets the URL can attempt the passcode. Send the passcode separately if you want an extra step.
-- A customer can **Revoke link** in the same browser that created it. Revocation deletes the saved object and stops that URL from loading.
+- A customer can **Revoke link** in the same browser that created it. Revocation deletes the saved value and stops that URL from loading.
 - Uploaded audio is limited to 10 MB and the complete gift payload to 20 MB. Smaller photos and MP3 files make link creation faster.
 - No gift expiration is configured; links remain until their owner revokes them or Lovbyte deletes them.
-- Cloudflare storage and request quotas apply to the Lovbyte account. Set Cloudflare alerts or limits before inviting a large audience.
+- KV changes can take up to about 60 seconds to propagate globally. Cloudflare storage and request quotas apply to the Lovbyte account; check current quotas before inviting a large audience.
 
 The older download option remains available for a customer who wants to host a separate copy manually. `Save in this browser` only saves a local preview; it does not create a share link.
 
