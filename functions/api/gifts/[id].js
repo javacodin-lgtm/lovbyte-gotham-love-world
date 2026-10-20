@@ -27,7 +27,7 @@ export async function onRequestPut({ request, params, env }) {
   try { record = await prepareRecord(body.config, params.id, existing); }
   catch (error) { return json({ error: error.message }, 400); }
   record.ownerToken = existing.ownerToken;
-  try { await env.GIFTS.put(`gift/${params.id}`, JSON.stringify(record), { httpMetadata: { contentType: "application/json; charset=utf-8" } }); }
+  try { await env.GIFTS.put(`gift/${params.id}`, JSON.stringify(record)); }
   catch { return json({ error: "The gift could not be updated. Please try again." }, 503); }
   return json({ id: params.id, shareUrl: `${new URL(request.url).origin}/?gift=${encodeURIComponent(params.id)}` });
 }

@@ -12,7 +12,7 @@ export async function onRequestPost({ request, env }) {
   catch (error) { return json({ error: error.message }, 400); }
   record.ownerToken = crypto.randomUUID() + crypto.randomUUID();
   try {
-    await env.GIFTS.put(`gift/${id}`, JSON.stringify(record), { httpMetadata: { contentType: "application/json; charset=utf-8" } });
+    await env.GIFTS.put(`gift/${id}`, JSON.stringify(record));
   } catch { return json({ error: "The gift could not be stored. Please try again." }, 503); }
   return json({ id, manageToken: record.ownerToken, shareUrl: `${new URL(request.url).origin}/?gift=${encodeURIComponent(id)}` }, 201);
 }
