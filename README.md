@@ -1,35 +1,51 @@
 # A Little Gotham Love World
 
-A responsive, self-contained Batman × Catwoman-inspired scrapbook gift. The artwork is original inline SVG/CSS, so it does not rely on external image links. The Lovbyte signature appears at the opening and in the end credit.
+A responsive, handmade Batman × Catwoman-inspired gift scrapbook with a customer-friendly editor and a one-click share-link flow. The artwork is original inline SVG/CSS, so the starter does not depend on external image links. Lovbyte appears in the opening scene and end credit.
 
-## Preview it
+## What the customer does
 
-Open the index.html file in a modern browser. No install or build step is needed. Some browsers restrict fetching gift-config.json from a file page, so use the owner editor or a small local web server when checking the published config file.
+1. Open the Lovbyte template and choose **Customize this gift for your person**. The editor also opens directly with `?template=1`.
+2. Change the names, messages, photos, soundtrack, and other details.
+3. Choose a 6–10 digit recipient passcode.
+4. Tick the sharing note, select **Create my gift link**, then **Copy link**.
+5. Send the link to their loved one. The loved one enters the passcode before the full letter, photos, or song are returned by the server.
 
-## Personalize it without coding
+The customer can later return to the editor in the same browser to update or revoke their saved link. The management token stays in that browser's IndexedDB and is not part of the share URL. Clearing browser storage means the customer may lose the ability to update or revoke that link.
 
-1. On the opening screen, choose **Customize this gift for your person ↗**. You can also press Ctrl + Shift + E (on a Mac, Control + Shift + E), or open the link with ?edit=1. The owner desk opens behind a PIN prompt; it is separate from the recipient's gift experience.
-2. The starter Owner Desk PIN is 1212. Change it in Your secret & your words. The recipient's starter passcode is 0406; set your own 4–10 digit code before sharing.
-3. Edit names, title and button text, note, letter, dialogue, secrets, reasons, theme, photos, artwork, and music. Add or replace photos, adjust frame size, position and rotation, move a sticker, and edit captions and dates. Photo uploads are resized for a manageable gift file; uploaded audio is limited to 18 MB.
-4. Save in this browser keeps the edits in this browser using IndexedDB. This is useful for previewing, but it does not update a hosted copy or transfer edits to another device.
-5. Download gift config creates gift-config.json. Upload that file next to index.html, replacing the existing one. A fresh visitor or another device will then see those settings.
-6. If you use the same browser after exporting, the browser's locally saved edits take precedence over the hosted config. To preview a newly uploaded hosted config in that browser, choose Restore starter version in the Owner Desk first (this clears the saved local copy), then reload.
-7. The **end link URL** field adds an optional button to the final page. The opening-screen template link label can also be changed in the owner desk.
+## One-time Lovbyte hosting setup
 
-The downloadable JSON can include all uploaded photo and music data, so it may be a large file. Keep a backup of the exported config and use reasonably sized photos.
+The share-link API requires **Cloudflare Pages**, Cloudflare Pages Functions, one private R2 bucket, and one KV namespace. GitHub Pages serves only the static site and cannot run the share-link functions. The current GitHub Pages link will not create customer-specific links until the project is deployed to Cloudflare Pages and the bindings below are added.
+
+1. Put `index.html`, `gift-config.json`, `_routes.json`, and the `functions/` folder together at the root of the GitHub repository.
+2. In Cloudflare, create a Pages project connected to that GitHub repository. Choose no build command and `.` as the build output directory.
+3. Create a private R2 bucket for gifts (for example, `lovbyte-gifts`) and a KV namespace for rate limits (for example, `lovbyte-gift-limits`).
+4. Open the Pages project **Settings → Bindings**. Add an R2 bucket binding named `GIFTS` and select the bucket. Add a KV namespace binding named `LIMITS` and select the namespace.
+5. Redeploy the Pages project so both bindings are active. Open the new Cloudflare Pages URL and test the editor's **Create my gift link** button.
+6. Give customers the Cloudflare Pages template URL. They do not need a GitHub or Cloudflare account to customize and make a gift link.
+
+Cloudflare's [Pages Functions bindings guide](https://developers.cloudflare.com/pages/functions/bindings/) describes the R2 and KV binding setup. Its [Functions routing guide](https://developers.cloudflare.com/pages/functions/routing/) documents the `functions/` routing used here.
+
+## Storage, privacy, and limits
+
+- Each published gift is stored in a private R2 bucket under a random ID. The API returns only the recipient name, nickname, opening message, and button text before the passcode.
+- The recipient passcode is SHA-256 hashed with the gift ID and checked by the server. The complete gift data is returned only after the passcode is correct. Eight attempts per gift and IP per hour are allowed.
+- The owner desk PIN and recipient passcode are not sent in the public preview. Gift data is not end-to-end encrypted; the Lovbyte Cloudflare account controls the storage. After unlocking, the recipient can view the content and browser-delivered media.
+- The share URL is unlisted, not a public directory listing. Anyone who gets the URL can attempt the passcode. Send the passcode separately if you want an extra step.
+- A customer can **Revoke link** in the same browser that created it. Revocation deletes the saved object and stops that URL from loading.
+- Uploaded audio is limited to 10 MB and the complete gift payload to 20 MB. Smaller photos and MP3 files make link creation faster.
+- No gift expiration is configured; links remain until their owner revokes them or Lovbyte deletes them.
+- Cloudflare storage and request quotas apply to the Lovbyte account. Set Cloudflare alerts or limits before inviting a large audience.
+
+The older download option remains available for a customer who wants to host a separate copy manually. `Save in this browser` only saves a local preview; it does not create a share link.
 
 ## Music player
 
-The owner can choose six styles, shape, width, location, cover, title, background, accent, and spin/breathe/still animation. A direct MP3, M4A, OGG, or WAV URL or an uploaded audio file works with the custom play/pause and volume controls. A normal webpage link to a song page will not work as an audio file.
+The owner can choose six player styles, shape, width, location, cover, title, background, accent, and spin/breathe/still animation. An uploaded MP3, M4A, OGG, or WAV file up to 10 MB works with play/pause and volume. A direct HTTPS audio URL also works; a normal song webpage link does not.
 
-Spotify or SoundCloud embed URLs can be entered as an alternative. Those providers render their own player and controls inside the widget; provider embeds do not allow this page's custom volume and play buttons to control the service. Browsers require the visitor to press play; this site does not autoplay.
+Spotify or SoundCloud embed URLs are supported. Those providers render their own controls inside the widget, so the page's custom play and volume buttons cannot control provider embeds. Audio waits for the visitor to press play.
 
-## Publish and share
+## Preview and static hosting
 
-Upload both index.html and gift-config.json to any static host that serves HTML and JSON from the same folder (for example, GitHub Pages, Netlify, or Cloudflare Pages). Open the resulting HTTPS link on a phone and desktop before sharing it. Use that URL as the gift link. To open the editor directly for a template customer, add `?template=1`; the customization button is also available on the opening screen. The optional end link is for any second surprise, shop, or destination URL you choose.
+Open `index.html` in a modern browser to preview the design. Browser file pages may block loading `gift-config.json`; use the local editor or a local web server for that preview.
 
-## Important privacy limit
-
-This static edition's passcode is an affectionate reveal, not real access control. The page's JavaScript, gift-config.json, and any photos or audio packaged with it can be inspected or downloaded; the recipient can also discover the passcode in those files. Changing the code or hiding the editor shortcut does not make static hosting private.
-
-For genuinely private photos and letters, use a backend-authenticated version: verify credentials on the server, issue a short-lived secure session cookie, and serve the protected page and media only after authorization. Do not put a real password or private media in a public static folder. This project does not claim to provide that backend.
+GitHub Pages, Netlify, and other static hosts can still show the starter gift, but the one-click per-customer link flow runs only after the `functions/` directory is deployed on Cloudflare Pages with the `GIFTS` and `LIMITS` bindings.
